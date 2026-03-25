@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TaskZen | Taskboard</title>
+    <link rel="icon" type="image/png" href="{% static 'images/taskzenICON.jpg' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/taskboard.css' %}">
+    <style>
+        /* Inline CSS for immediate background improvement */
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .bg-purple { background-color: #6f42c1 !important; }
+        .sidebar { border-radius: 0 15px 15px 0; }
+        .task-card { 
+            border: none; 
+            border-radius: 15px; 
+            transition: transform 0.3s ease, shadow 0.3s ease;
+        }
+        .task-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important; 
+        }
+        .btn-purple:hover {
+            opacity: 0.9;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="sticky-top navbar navbar-dark bg-purple px-3 shadow">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'images/LOGOwhite.png' %}" height="45">
+        </a>
+
+        <div class="d-flex align-items-center ms-auto">
+            <form action="{% url 'taskboard' %}" method="GET" class="d-none d-md-block me-3">
+                <input class="form-control search-box" name="search" type="search" placeholder="Search tasks..." value="{{ request.GET.search }}">
+            </form>
+            <a href="{% url 'logout' %}" class="btn btn-info btn-sm">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2 sidebar p-4 d-none d-lg-block bg-white shadow-sm">
+                <h5 class="mb-4 fw-bold text-dark">Sort By</h5>
+                <div class="list-group list-group-flush mb-5">
+                    <a href="?sort=newest" class="list-group-item list-group-item-action border-0 rounded mb-2 {% if request.GET.sort == 'newest' %}active{% endif %}">Newest 1st</a>
+                    <a href="?sort=priority" class="list-group-item list-group-item-action border-0 rounded mb-2 {% if request.GET.sort == 'priority' %}active{% endif %}">Priority Wise</a>
+                    <a href="?sort=due" class="list-group-item list-group-item-action border-0 rounded">Due Date</a>
+                </div>
+
+                <h5 class="mb-4 fw-bold text-dark">Smart Features</h5>
+                <a href="{% url 'productivity_stats' %}" class="btn w-100 mb-3 btn-purple text-white shadow-sm" style="background-color: #6f42c1;">Productivity</a>
+                <a href="{% url 'task_summary' %}" class="btn w-100 mb-3 btn-purple text-white shadow-sm" style="background-color: #6f42c1;">Summary</a>
+            </div>
+
+            <div class="col-lg-10 col-12 p-4">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="row g-4">
+                    {% for task in tasks %}
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <div class="card task-card text-white h-100 shadow-sm" 
+                             style="--task-color: {% if task.priority == 'High' %}#dc3545{% elif task.priority == 'Medium' %}#fd7e14{% else %}#198754{% endif %}; background-color: var(--task-color);">
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <a href="{% url 'task_detail' task.id %}" class="text-white text-decoration-none">
+                                        <h5 class="card-title fw-bold mb-0">{{ task.title }}</h5>
+                                    </a>
+                                    <span class="badge bg-white text-dark small">{{ task.priority }}</span>
+                                </div>
+                                <p class="card-text mt-3 small opacity-90">{{ task.description|truncatechars:80 }}</p>
+                                
+                                <div class="mt-auto pt-3 border-top border-light border-opacity-25 d-flex justify-content-between">
+                                    <a href="{% url 'edit_task' task.id %}" class="btn btn-sm btn-light px-3">Edit</a>
+                                    
+                                    <form action="{% url 'delete_task' task.id %}" method="POST" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-light" 
+                                                onclick="return confirm('Delete this task permanently?')">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <h3 class="text-muted">Your taskboard is empty.</h3>
+                        <p>Click "Add New Task" to begin.</p>
+                    </div>
+                    {% endfor %}
+
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <a href="{% url 'add_task' %}" class="text-decoration-none h-100">
+                            <div class="card task-card add d-flex justify-content-center align-items-center h-100 bg-white" 
+                                 style="border: 2px dashed #6f42c1; min-height: 200px;">
+                                <div class="text-center">
+                                    <img src="{% static 'images/dashboard/adddashboard.png' %}" width="60" alt="Add Task">
+                                    <p class="mt-2 fw-bold" style="color: #6f42c1;">Add New Task</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white border-top mt-5 py-3 text-center">
+        <p class="mb-1 text-muted small">Developed by students of iTprenure</p>
+        <p class="small mb-0">© 2026 TaskZen | All Rights Reserved</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

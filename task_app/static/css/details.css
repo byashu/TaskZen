@@ -1,0 +1,185 @@
+/* ================= GLOBAL STYLES ================= */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.bg-purple {
+    background: #6f42c1;
+}
+
+/* ================= CONTAINER & CARD ================= */
+.form-container {
+    max-width: 700px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.form-card {
+    background: #ffffff; /* Modern white card for contrast */
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.form-card h2 {
+    font-size: 2rem;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+/* ================= LABELS & TYPOGRAPHY ================= */
+.section-title, .meta-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #6c757d;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* ================= READ-ONLY INPUTS & BOXES ================= */
+.form-card input,
+.form-card textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    font-size: 1rem;
+    background-color: #f8f9fa; /* Light grey to show they are read-only */
+    color: #495057;
+}
+
+.description-box {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    border-left: 5px solid #6f42c1;
+    color: #495057;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+textarea {
+    resize: none;
+}
+
+/* ================= BADGES & RADIOS ================= */
+.status-badge {
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    display: inline-block;
+}
+
+.radio-section {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 25px;
+}
+
+.radio-column {
+    flex: 1;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.radio-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: #495057;
+}
+
+/* ================= BUTTONS ================= */
+.form-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 25px;
+}
+
+.form-buttons a,
+.form-buttons button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+/* Specific Button Colors */
+.btn-edit {
+    background: #198754; /* Green */
+    color: white;
+}
+
+.btn-delete {
+    background: #dc3545; /* Red */
+    color: white;
+}
+
+.btn-complete {
+    background: #ffc107; /* Gold */
+    color: #212529;
+}
+
+.btn-back, .btn-link {
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #ddd;
+}
+
+/* Hover Effects */
+.btn-edit:hover { background: #157347; transform: scale(1.02); }
+.btn-delete:hover { background: #bb2d3b; transform: scale(1.02); }
+.btn-complete:hover { background: #e0a800; transform: scale(1.02); }
+.btn-back:hover, .btn-link:hover { background: #e2e6ea; color: #6f42c1; }
+
+/* ================= FOOTER ================= */
+.foot, footer {
+    background: #000;
+    text-align: center;
+    color: white;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+/* ================= MOBILE RESPONSIVE ================= */
+@media(max-width:767px) {
+    .radio-section {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+    }
+
+    .form-card {
+        padding: 30px 20px;
+    }
+}

@@ -1,0 +1,150 @@
+/* ================= GLOBAL STYLES ================= */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.bg-purple {
+    background-color: #6f42c1 !important;
+}
+
+/* ================= FORM CONTAINER & CARD ================= */
+.form-container {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.form-card {
+    background-color: white; /* Clean white card for better readability */
+    padding: 40px 30px;
+    border-radius: 25px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.form-card h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333; /* Darker text for professional contrast */
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* ================= FORM FIELDS ================= */
+.form-label, .form-card label {
+    display: block;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+}
+
+.form-control, .form-select, .form-card input, .form-card textarea, .form-card select {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    outline: none;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #fcfcfc;
+}
+
+.form-control:focus, .form-select:focus, .form-card input:focus, .form-card textarea:focus {
+    border-color: #6f42c1;
+    background-color: #fff;
+    box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.1);
+}
+
+/* ================= BUTTONS & ACTIONS ================= */
+.actions, .form-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.btn-update, .btn-add, .btn-edit {
+    flex: 1;
+    padding: 12px 30px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    
+    /* Green Style from your original CSS */
+    background: #198754;
+    color: white;
+    border: 2px solid transparent;
+}
+
+.btn-secondary, .btn-cancle {
+    flex: 1;
+    padding: 12px 30px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+
+    /* Gold Style from your original CSS */
+    background: #ffc107;
+    color: #212529;
+    border: 2px solid transparent;
+}
+
+/* Button Hovers */
+.btn-update:hover, .btn-add:hover, .btn-edit:hover {
+    background: white;
+    color: #198754;
+    border-color: #198754;
+    transform: scale(1.02);
+}
+
+.btn-secondary:hover, .btn-cancle:hover {
+    background: white;
+    color: #856404;
+    border-color: #ffc107;
+    transform: scale(1.02);
+}
+
+/* ================= FOOTER ================= */
+.foot, footer {
+    background: white;
+    border-top: 1px solid #dee2e6;
+    text-align: center;
+    color: #6c757d;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 767px) {
+    .form-card {
+        padding: 30px 20px;
+        margin: 20px;
+    }
+    
+    .actions, .form-buttons {
+        flex-direction: column;
+    }
+}
