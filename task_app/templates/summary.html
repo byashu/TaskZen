@@ -27,26 +27,28 @@
             <div class="col-md-4">
                 <div class="card summary-card p-4 border-start border-primary border-5">
                     <h6 class="text-muted fw-bold">TOTAL TASKS</h6>
-                    <h2 class="display-5 fw-bold">{{ total }}</h2>
+                    <h2 class="display-5 fw-bold">{{ total|default:0 }}</h2>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card summary-card p-4 border-start border-success border-5">
                     <h6 class="text-muted fw-bold">COMPLETED</h6>
-                    <h2 class="display-5 fw-bold text-success">{{ completed }}</h2>
+                    <h2 class="display-5 fw-bold text-success">{{ completed|default:0 }}</h2>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card summary-card p-4 border-start border-warning border-5">
                     <h6 class="text-muted fw-bold">PENDING</h6>
-                    <h2 class="display-5 fw-bold text-warning">{{ pending }}</h2>
+                    <h2 class="display-5 fw-bold text-warning">{{ pending|default:0 }}</h2>
                 </div>
             </div>
         </div>
 
         <div class="row justify-content-center">
             <div class="col-lg-7">
-                <div class="chart-container text-center" id="summary-data-bridge" data-completed="{{ completed }}" data-pending="{{ pending }}">
+                <div class="chart-container text-center" id="summary-data-bridge" 
+                     data-completed="{{ completed|default:0 }}" 
+                     data-pending="{{ pending|default:0 }}">
                     <h4 class="mb-4 fw-bold">Task Status Overview</h4>
                     <canvas id="summaryChart"></canvas>
                 </div>

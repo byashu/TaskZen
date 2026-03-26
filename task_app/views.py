@@ -13,10 +13,10 @@ def index_view(request):
 
 @login_required(login_url='login')
 def taskboard_view(request):
-    # 1. Get initial tasks for the logged-in user
+    # Get tasks for the logged-in user
     tasks = Task.objects.filter(user=request.user)
 
-    # 2. Handle Search Logic
+    # Handle Search Logic
     search_query = request.GET.get('search')
     if search_query:
         tasks = tasks.filter(
@@ -24,15 +24,13 @@ def taskboard_view(request):
             Q(description__icontains=search_query)
         )
 
-    # 3. Handle Sorting Logic
+    # Handle Sorting Logic
     sort_by = request.GET.get('sort')
     if sort_by == 'priority':
-        # Sorting by priority (High -> Medium -> Low)
         tasks = tasks.order_by('priority') 
     elif sort_by == 'due':
         tasks = tasks.order_by('due_date')
     else:
-        # Default: Newest first
         tasks = tasks.order_by('-created_at')
 
     context = {
@@ -46,36 +44,34 @@ def task_detail(request, pk):
     task = get_object_or_404(Task, pk=pk, user=request.user)
     return render(request, 'detail.html', {'task': task})
 
-# --- 2. SMART FEATURES ---
+# --- 2. SMART FEATURES (CHARTS & ANALYTICS) ---
 
 @login_required(login_url='login')
 def productivity_stats(request):
     tasks = Task.objects.filter(user=request.user)
-    total_tasks = tasks.count()
-    
-    # Calculate counts for different priorities
-    high_priority = tasks.filter(priority='High').count()
-    medium_priority = tasks.filter(priority='Medium').count()
-    low_priority = tasks.filter(priority='Low').count()
-    
-    # Calculate completed vs pending (assuming you have a 'completed' boolean field)
-    completed_tasks = tasks.filter(completed=True).count()
-    pending_tasks = tasks.filter(completed=False).count()
     
     context = {
-        'total': total_tasks,
-        'high': high_priority,
-        'medium': medium_priority,
-        'low': low_priority,
-        'completed': completed_tasks,
-        'pending': pending_tasks,
+        'total': tasks.count(),
+        'high': tasks.filter(priority='High').count(),
+        'medium': tasks.filter(priority='Medium').count(),
+        'low': tasks.filter(priority='Low').count(),
+        'completed': tasks.filter(completed=True).count(),
+        'pending': tasks.filter(completed=False).count(),
     }
     return render(request, 'productivity.html', context)
 
 @login_required(login_url='login')
 def task_summary(request):
+    # UPDATED: Now calculates counts so summary.html cards and charts work
     tasks = Task.objects.filter(user=request.user).order_by('due_date')
-    return render(request, 'summary.html', {'tasks': tasks})
+    
+    context = {
+        'tasks': tasks,
+        'total': tasks.count(),
+        'completed': tasks.filter(completed=True).count(),
+        'pending': tasks.filter(completed=False).count(),
+    }
+    return render(request, 'summary.html', context)
 
 # --- 3. TASK CRUD OPERATIONS ---
 
@@ -129,7 +125,7 @@ def delete_task(request, pk):
         messages.warning(request, "Task deleted successfully.")
     return redirect('taskboard')
 
-# --- 4. AUTHENTICATION LOGIC ---
+# --- 4. AUTHENTICATION ---
 
 def register_view(request):
     if request.method == 'POST':
