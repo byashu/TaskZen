@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
             // 3. Initialize the Chart
             new Chart(ctx, {
-                type: 'bar', // Using 'bar' for a clean, professional presentation look
+                type: 'bar', // Professional bar chart for presentation
                 data: {
                     labels: ['Completed', 'Pending'],
                     datasets: [{
@@ -26,7 +26,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
+                    // STOP CHART EXPANSION: This forces the chart to stay inside the container height
+                    maintainAspectRatio: false, 
                     scales: {
                         y: { 
                             beginAtZero: true, 
@@ -37,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     plugins: {
                         legend: {
-                            display: false // Hiding legend for a cleaner single-dataset bar chart
+                            display: false // Cleaner look for a single dataset
                         }
                     }
                 }

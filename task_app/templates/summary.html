@@ -45,15 +45,18 @@
         </div>
 
         <div class="row justify-content-center">
-            <div class="col-lg-7">
-                <div class="chart-container text-center" id="summary-data-bridge" 
-                     data-completed="{{ completed|default:0 }}" 
-                     data-pending="{{ pending|default:0 }}">
-                    <h4 class="mb-4 fw-bold">Task Status Overview</h4>
-                    <canvas id="summaryChart"></canvas>
-                </div>
-            </div>
+    <div class="col-lg-7">
+        <div class="chart-container text-center" id="summary-data-bridge" 
+             data-completed="{{ completed|default:0 }}" 
+             data-pending="{{ pending|default:0 }}"
+             style="position: relative; height:400px; width:100%;">
+            
+            <h4 class="mb-4 fw-bold">Task Status Overview</h4>
+            
+            <canvas id="summaryChart"></canvas>
         </div>
+        </div>
+    </div>
     </div>
 
     <script src="{% static 'js/summary.js' %}"></script>
