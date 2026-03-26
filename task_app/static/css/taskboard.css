@@ -1,13 +1,19 @@
 /* ================= GLOBAL STYLES ================= */
 body {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    /* FIX: Changed path to dashboardbg02.png as seen in your file explorer */
+    /* Added a linear-gradient fallback to ensure the page looks good while loading */
+    background: linear-gradient(135deg, rgba(245, 247, 250, 0.8) 0%, rgba(195, 207, 226, 0.8) 100%), 
+                url('../images/dashboardbg02.png'); 
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
 }
 
-.bg-purple { 
-    background-color: #6f42c1 !important; 
+.bg-purple {
+    background-color: #6f42c1 !important;
 }
 
 /* ================= SIDEBAR & NAVIGATION ================= */
@@ -28,7 +34,9 @@ body {
     background: rgb(180, 75, 255);
     font-weight: bold;
     color: white;
+    border: none; /* Added to remove default border */
     border-radius: 10px;
+    padding: 10px; /* Added for better clickable area */
     transition: all 0.3s ease;
 }
 
@@ -50,6 +58,9 @@ body {
     color: #6f42c1;
     font-weight: bold;
     border-radius: 8px;
+    padding: 8px 15px; /* Added padding to make it look like a button */
+    text-decoration: none; /* Added to remove underline */
+    display: inline-block; /* Added to ensure padding and height work */
     transition: 0.5s;
 }
 
@@ -66,8 +77,9 @@ body {
     overflow: hidden;
     color: white;
     padding: 15px;
-    height: auto; /* Changed from 120px to auto for better content fit */
+    height: auto; 
     min-height: 140px;
+    margin-bottom: 15px; /* Added spacing between cards */
 }
 
 .task-card:hover {
@@ -94,12 +106,13 @@ body {
 
 /* Special "Add Task" Card */
 .task-card.add {
-    background-color: rgba(200, 200, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.8); /* Changed to white for better contrast */
     border: 3px dashed #6f42c1;
     color: #6f42c1;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer; /* Added to show it is clickable */
 }
 
 .task-card.add:hover {
@@ -116,7 +129,7 @@ body {
 }
 
 .foot {
-    background: #000;
+    background: #111; /* Slightly darker for better contrast */
     text-align: center;
     color: white;
     padding: 20px;
