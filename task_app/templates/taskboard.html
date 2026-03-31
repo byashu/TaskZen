@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
     <meta charset="utf-8">
@@ -8,61 +8,109 @@
     <title>TaskZen | Taskboard</title>
     <link rel="icon" type="image/png" href="{% static 'images/taskzenICON.jpg' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/taskboard.css' %}">
-    <style>
-        /* Inline CSS for immediate background improvement */
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-        }
-        .bg-purple { background-color: #6f42c1 !important; }
-        .sidebar { border-radius: 0 15px 15px 0; }
-        .task-card { 
-            border: none; 
-            border-radius: 15px; 
-            transition: transform 0.3s ease, shadow 0.3s ease;
-        }
-        .task-card:hover { 
-            transform: translateY(-5px); 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important; 
-        }
-        .btn-purple:hover {
-            opacity: 0.9;
-            color: white;
-        }
-    </style>
 </head>
 
 <body>
-    <nav class="sticky-top navbar navbar-dark bg-purple px-3 shadow">
+    <!-- ===== NAVBAR ===== -->
+    <nav class="sticky-top navbar navbar-dark bg-purple px-3 shadow" id="mainNav">
         <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'images/LOGOwhite.png' %}" height="45">
         </a>
 
-        <div class="d-flex align-items-center ms-auto">
-            <form action="{% url 'taskboard' %}" method="GET" class="d-none d-md-block me-3">
-                <input class="form-control search-box" name="search" type="search" placeholder="Search tasks..." value="{{ request.GET.search }}">
+        <div class="d-flex align-items-center ms-auto gap-2">
+            <!-- Search -->
+            <form action="{% url 'taskboard' %}" method="GET" class="d-none d-md-block">
+                <input class="form-control search-box" name="search" type="search"
+                       placeholder="Search tasks..." value="{{ request.GET.search }}">
             </form>
+
+            <!-- Notification Bell -->
+            <div class="position-relative">
+                <button class="btn btn-link text-white p-1" id="notifBtn" title="Due Tomorrow">
+                    <i class="fas fa-bell fs-5"></i>
+                    {% if due_tomorrow_count > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                              style="font-size:0.6rem;">
+                            {{ due_tomorrow_count }}
+                        </span>
+                    {% endif %}
+                </button>
+                <!-- Notification Dropdown -->
+                <div id="notifPanel" class="shadow rounded p-3"
+                     style="display:none; position:absolute; right:0; top:110%; width:280px; z-index:1000;
+                            background:var(--card-bg); border:1px solid var(--border-color);">
+                    <h6 class="fw-bold mb-2" style="color:var(--text-main);">
+                        <i class="fas fa-clock me-1 text-warning"></i> Due Tomorrow
+                    </h6>
+                    {% if due_tomorrow %}
+                        {% for t in due_tomorrow %}
+                            <div class="d-flex align-items-center gap-2 py-1 border-bottom" style="border-color:var(--border-color)!important;">
+                                <span class="badge {% if t.priority == 'High' %}bg-danger{% elif t.priority == 'Medium' %}bg-warning text-dark{% else %}bg-success{% endif %}">
+                                    {{ t.priority }}
+                                </span>
+                                <span class="small" style="color:var(--text-main);">{{ t.title|truncatechars:30 }}</span>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="small text-muted mb-0">No tasks due tomorrow.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Dark / Light toggle -->
+            <button class="btn btn-link text-white p-1" id="themeToggle" title="Toggle Dark/Light Mode">
+                <i class="fas fa-moon fs-5" id="themeIcon"></i>
+            </button>
+
             <a href="{% url 'logout' %}" class="btn btn-info btn-sm">Logout</a>
         </div>
     </nav>
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-2 sidebar p-4 d-none d-lg-block bg-white shadow-sm">
-                <h5 class="mb-4 fw-bold text-dark">Sort By</h5>
-                <div class="list-group list-group-flush mb-5">
-                    <a href="?sort=newest" class="list-group-item list-group-item-action border-0 rounded mb-2 {% if request.GET.sort == 'newest' %}active{% endif %}">Newest 1st</a>
-                    <a href="?sort=priority" class="list-group-item list-group-item-action border-0 rounded mb-2 {% if request.GET.sort == 'priority' %}active{% endif %}">Priority Wise</a>
-                    <a href="?sort=due" class="list-group-item list-group-item-action border-0 rounded">Due Date</a>
+            <!-- ===== SIDEBAR ===== -->
+            <div class="col-lg-2 sidebar p-4 d-none d-lg-block shadow-sm">
+                <h5 class="mb-3 fw-bold sidebar-heading">Sort By</h5>
+                <div class="list-group list-group-flush mb-4">
+                    <a href="?sort=newest" class="list-group-item list-group-item-action border-0 rounded mb-2 sidebar-link
+                        {% if request.GET.sort == 'newest' or not request.GET.sort %}active{% endif %}">
+                        <i class="fas fa-clock me-1"></i> Newest 1st
+                    </a>
+                    <a href="?sort=priority" class="list-group-item list-group-item-action border-0 rounded mb-2 sidebar-link
+                        {% if request.GET.sort == 'priority' %}active{% endif %}">
+                        <i class="fas fa-flag me-1"></i> Priority
+                    </a>
+                    <a href="?sort=due" class="list-group-item list-group-item-action border-0 rounded sidebar-link
+                        {% if request.GET.sort == 'due' %}active{% endif %}">
+                        <i class="fas fa-calendar me-1"></i> Due Date
+                    </a>
                 </div>
 
-                <h5 class="mb-4 fw-bold text-dark">Smart Features</h5>
-                <a href="{% url 'productivity_stats' %}" class="btn w-100 mb-3 btn-purple text-white shadow-sm" style="background-color: #6f42c1;">Productivity</a>
-                <a href="{% url 'task_summary' %}" class="btn w-100 mb-3 btn-purple text-white shadow-sm" style="background-color: #6f42c1;">Summary</a>
+                <h5 class="mb-3 fw-bold sidebar-heading">Smart Features</h5>
+                <a href="{% url 'productivity_stats' %}" class="btn w-100 mb-2 text-white shadow-sm" style="background-color:#6f42c1;">
+                    <i class="fas fa-chart-pie me-1"></i> Productivity
+                </a>
+                <a href="{% url 'task_summary' %}" class="btn w-100 mb-2 text-white shadow-sm" style="background-color:#6f42c1;">
+                    <i class="fas fa-chart-bar me-1"></i> Summary
+                </a>
+                <a href="{% url 'manage_categories' %}" class="btn w-100 mb-4 text-white shadow-sm" style="background-color:#5a32a3;">
+                    <i class="fas fa-tags me-1"></i> Categories
+                </a>
+
+                <h5 class="mb-3 fw-bold sidebar-heading">Export</h5>
+                <a href="{% url 'export_excel' %}" class="btn w-100 mb-2 btn-success shadow-sm">
+                    <i class="fas fa-file-excel me-1"></i> Excel
+                </a>
+                <a href="{% url 'export_pdf' %}" class="btn w-100 btn-danger shadow-sm">
+                    <i class="fas fa-file-pdf me-1"></i> PDF
+                </a>
             </div>
 
+            <!-- ===== MAIN CONTENT ===== -->
             <div class="col-lg-10 col-12 p-4">
+
                 {% if messages %}
                     {% for message in messages %}
                         <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
@@ -72,26 +120,63 @@
                     {% endfor %}
                 {% endif %}
 
-                <div class="row g-4">
-                    {% for task in tasks %}
+                <!-- ===== PENDING TASKS ===== -->
+                <div class="d-flex align-items-center mb-3">
+                    <h4 class="fw-bold mb-0 section-heading">
+                        <i class="fas fa-hourglass-half me-2 text-warning"></i>Pending
+                        <span class="badge bg-warning text-dark ms-2">{{ pending_tasks.count }}</span>
+                    </h4>
+                    <a href="{% url 'add_task' %}" class="btn btn-sm ms-auto" style="background-color:#6f42c1; color:white;">
+                        <i class="fas fa-plus me-1"></i> Add Task
+                    </a>
+                </div>
+
+                <div class="row g-3 mb-5">
+                    {% for task in pending_tasks %}
                     <div class="col-12 col-sm-6 col-md-4">
-                        <div class="card task-card text-white h-100 shadow-sm" 
-                             style="--task-color: {% if task.priority == 'High' %}#dc3545{% elif task.priority == 'Medium' %}#fd7e14{% else %}#198754{% endif %}; background-color: var(--task-color);">
+                        <div class="card task-card text-white h-100 shadow-sm"
+                             style="background-color: {% if task.priority == 'High' %}#dc3545{% elif task.priority == 'Medium' %}#fd7e14{% else %}#198754{% endif %};">
                             <div class="card-body d-flex flex-column">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <a href="{% url 'task_detail' task.id %}" class="text-white text-decoration-none">
-                                        <h5 class="card-title fw-bold mb-0">{{ task.title }}</h5>
+
+                                <!-- Title row with checkbox -->
+                                <div class="d-flex align-items-start gap-2 mb-1">
+                                    <form action="{% url 'toggle_task' task.id %}" method="POST" class="mt-1">
+                                        {% csrf_token %}
+                                        <input type="checkbox" class="form-check-input task-checkbox"
+                                               onchange="this.form.submit()" title="Mark as complete"
+                                               style="width:1.1rem; height:1.1rem; cursor:pointer;">
+                                    </form>
+                                    <a href="{% url 'task_detail' task.id %}" class="text-white text-decoration-none flex-grow-1">
+                                        <h6 class="card-title fw-bold mb-0">{{ task.title }}</h6>
                                     </a>
-                                    <span class="badge bg-white text-dark small">{{ task.priority }}</span>
+                                    <span class="badge bg-white text-dark small flex-shrink-0">{{ task.priority }}</span>
                                 </div>
-                                <p class="card-text mt-3 small opacity-90">{{ task.description|truncatechars:80 }}</p>
-                                
-                                <div class="mt-auto pt-3 border-top border-light border-opacity-25 d-flex justify-content-between">
+
+                                <!-- Category tag -->
+                                {% if task.category %}
+                                    <span class="badge bg-white bg-opacity-25 text-white small mb-1"
+                                          style="border:1px solid rgba(255,255,255,0.5);">
+                                        <i class="fas fa-tag me-1"></i>{{ task.category.name }}
+                                    </span>
+                                {% endif %}
+
+                                <p class="card-text small opacity-90 mb-2">{{ task.description|truncatechars:70 }}</p>
+
+                                <!-- Due date -->
+                                <div class="small opacity-75 mb-2">
+                                    <i class="fas fa-calendar-alt me-1"></i>
+                                    {% if task.due_date %}
+                                        Due: {{ task.due_date|date:"M d, Y" }}
+                                    {% else %}
+                                        No due date
+                                    {% endif %}
+                                </div>
+
+                                <div class="mt-auto pt-2 border-top border-light border-opacity-25 d-flex justify-content-between">
                                     <a href="{% url 'edit_task' task.id %}" class="btn btn-sm btn-light px-3">Edit</a>
-                                    
                                     <form action="{% url 'delete_task' task.id %}" method="POST" class="d-inline">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn btn-sm btn-outline-light" 
+                                        <button type="submit" class="btn btn-sm btn-outline-light"
                                                 onclick="return confirm('Delete this task permanently?')">Delete</button>
                                     </form>
                                 </div>
@@ -99,33 +184,119 @@
                         </div>
                     </div>
                     {% empty %}
-                    <div class="col-12 text-center py-5">
-                        <h3 class="text-muted">Your taskboard is empty.</h3>
-                        <p>Click "Add New Task" to begin.</p>
+                    <div class="col-12">
+                        <div class="empty-state text-center py-4 rounded">
+                            <i class="fas fa-check-circle fa-3x text-success mb-2"></i>
+                            <p class="text-muted mb-0">No pending tasks — great job!</p>
+                        </div>
                     </div>
                     {% endfor %}
+                </div>
 
+                <!-- ===== COMPLETED TASKS ===== -->
+                <div class="d-flex align-items-center mb-3">
+                    <h4 class="fw-bold mb-0 section-heading">
+                        <i class="fas fa-check-circle me-2 text-success"></i>Completed
+                        <span class="badge bg-success ms-2">{{ completed_tasks.count }}</span>
+                    </h4>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    {% for task in completed_tasks %}
                     <div class="col-12 col-sm-6 col-md-4">
-                        <a href="{% url 'add_task' %}" class="text-decoration-none h-100">
-                            <div class="card task-card add d-flex justify-content-center align-items-center h-100 bg-white" 
-                                 style="border: 2px dashed #6f42c1; min-height: 200px;">
-                                <div class="text-center">
-                                    <img src="{% static 'images/dashboard/adddashboard.png' %}" width="60" alt="Add Task">
-                                    <p class="mt-2 fw-bold" style="color: #6f42c1;">Add New Task</p>
+                        <div class="card task-card h-100 shadow-sm completed-card"
+                             style="background-color:#dee2e6; border-left:4px solid #198754;">
+                            <div class="card-body d-flex flex-column">
+
+                                <!-- Title row with checkbox (checked) -->
+                                <div class="d-flex align-items-start gap-2 mb-1">
+                                    <form action="{% url 'toggle_task' task.id %}" method="POST" class="mt-1">
+                                        {% csrf_token %}
+                                        <input type="checkbox" class="form-check-input task-checkbox" checked
+                                               onchange="this.form.submit()" title="Mark as pending"
+                                               style="width:1.1rem; height:1.1rem; cursor:pointer;">
+                                    </form>
+                                    <a href="{% url 'task_detail' task.id %}" class="text-decoration-none flex-grow-1 text-muted">
+                                        <h6 class="card-title fw-bold mb-0 text-decoration-line-through">{{ task.title }}</h6>
+                                    </a>
+                                    <span class="badge bg-success ms-1 flex-shrink-0">Done</span>
+                                </div>
+
+                                {% if task.category %}
+                                    <span class="badge bg-secondary bg-opacity-25 text-secondary small mb-1">
+                                        <i class="fas fa-tag me-1"></i>{{ task.category.name }}
+                                    </span>
+                                {% endif %}
+
+                                <p class="card-text small text-muted mb-2">{{ task.description|truncatechars:70 }}</p>
+
+                                <div class="small text-muted mb-2">
+                                    <i class="fas fa-calendar-alt me-1"></i>
+                                    {% if task.due_date %}Due: {{ task.due_date|date:"M d, Y" }}{% else %}No due date{% endif %}
+                                </div>
+
+                                <div class="mt-auto pt-2 border-top d-flex justify-content-end">
+                                    <form action="{% url 'delete_task' task.id %}" method="POST" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                onclick="return confirm('Delete this task permanently?')">Delete</button>
+                                    </form>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <div class="empty-state text-center py-4 rounded">
+                            <i class="fas fa-tasks fa-3x text-muted mb-2"></i>
+                            <p class="text-muted mb-0">No completed tasks yet.</p>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <footer class="bg-white border-top mt-5 py-3 text-center">
-        <p class="mb-1 text-muted small">Developed by students of iTprenure</p>
+            </div><!-- /main content -->
+        </div><!-- /row -->
+    </div><!-- /container-fluid -->
+
+    <footer class="board-footer text-center py-3 mt-4">
+        <p class="mb-1 small">Developed by students of iTprenure</p>
         <p class="small mb-0">© 2026 TaskZen | All Rights Reserved</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ---- Dark / Light Mode ----
+        const html      = document.documentElement;
+        const toggle    = document.getElementById('themeToggle');
+        const icon      = document.getElementById('themeIcon');
+        const THEME_KEY = 'tz-theme';
+
+        function applyTheme(theme) {
+            html.setAttribute('data-theme', theme);
+            icon.className = theme === 'dark' ? 'fas fa-sun fs-5' : 'fas fa-moon fs-5';
+            localStorage.setItem(THEME_KEY, theme);
+        }
+
+        // Load saved preference
+        applyTheme(localStorage.getItem(THEME_KEY) || 'light');
+
+        toggle.addEventListener('click', () => {
+            applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        });
+
+        // ---- Notification panel toggle ----
+        const notifBtn   = document.getElementById('notifBtn');
+        const notifPanel = document.getElementById('notifPanel');
+
+        notifBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            notifPanel.style.display = notifPanel.style.display === 'none' ? 'block' : 'none';
+        });
+
+        document.addEventListener('click', () => {
+            notifPanel.style.display = 'none';
+        });
+    </script>
 </body>
 </html>
