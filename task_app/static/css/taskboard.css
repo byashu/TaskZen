@@ -1,66 +1,112 @@
-/* ===== CSS CUSTOM PROPERTIES (Light & Dark Mode) ===== */
-:root,
-[data-theme="light"] {
-    --bg-page:      linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    --sidebar-bg:   #ffffff;
-    --sidebar-text: #1f2937;
-    --card-bg:      #ffffff;
-    --text-main:    #212529;
-    --text-muted:   #6c757d;
-    --border-color: #dee2e6;
-    --empty-bg:     rgba(255,255,255,0.6);
-    --footer-bg:    #ffffff;
-    --footer-text:  #6c757d;
-    --input-bg:     #ffffff;
-    --input-text:   #212529;
-    --section-head: #212529;
+/* ================================================================
+   TASKZEN TASKBOARD — FULL STYLESHEET WITH DARK / LIGHT MODE
+   ================================================================ */
+
+/* ---- CSS Variables ---- */
+:root {
+    --bg-body:       linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --sidebar-bg:    #ffffff;
+    --sidebar-text:  #1f2937;
+    --sidebar-link:  #374151;
+    --content-bg:    transparent;
+    --card-bg:       #ffffff;
+    --card-text:     #212529;
+    --card-muted:    #6c757d;
+    --done-card-bg:  #e9ecef;
+    --done-border:   #198754;
+    --done-text:     #495057;
+    --section-head:  #212529;
+    --empty-bg:      rgba(255,255,255,0.65);
+    --empty-border:  #ced4da;
+    --empty-text:    #6c757d;
+    --footer-bg:     #ffffff;
+    --footer-border: #dee2e6;
+    --footer-text:   #6c757d;
+    --search-bg:     #ffffff;
+    --search-text:   #212529;
+    --search-border: #ced4da;
+    --notif-bg:      #ffffff;
+    --notif-border:  #dee2e6;
+    --notif-text:    #212529;
+    --alert-bg:      #fff3cd;
+    --alert-border:  #ffc107;
+    --alert-text:    #664d03;
 }
 
 [data-theme="dark"] {
-    --bg-page:      linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    --sidebar-bg:   #0f3460;
-    --sidebar-text: #e0e0e0;
-    --card-bg:      #1e293b;
-    --text-main:    #e2e8f0;
-    --text-muted:   #94a3b8;
-    --border-color: #334155;
-    --empty-bg:     rgba(30,41,59,0.8);
-    --footer-bg:    #0f172a;
-    --footer-text:  #94a3b8;
-    --input-bg:     #1e293b;
-    --input-text:   #e2e8f0;
-    --section-head: #e2e8f0;
+    --bg-body:       linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    --sidebar-bg:    #161b22;
+    --sidebar-text:  #c9d1d9;
+    --sidebar-link:  #8b949e;
+    --content-bg:    transparent;
+    --card-bg:       #1e2a3a;
+    --card-text:     #e6edf3;
+    --card-muted:    #8b949e;
+    --done-card-bg:  #1c2333;
+    --done-border:   #3fb950;
+    --done-text:     #8b949e;
+    --section-head:  #e6edf3;
+    --empty-bg:      rgba(22,27,34,0.85);
+    --empty-border:  #30363d;
+    --empty-text:    #8b949e;
+    --footer-bg:     #0d1117;
+    --footer-border: #21262d;
+    --footer-text:   #8b949e;
+    --search-bg:     #21262d;
+    --search-text:   #c9d1d9;
+    --search-border: #30363d;
+    --notif-bg:      #1c2333;
+    --notif-border:  #30363d;
+    --notif-text:    #c9d1d9;
+    --alert-bg:      #2d2a1f;
+    --alert-border:  #9e7a00;
+    --alert-text:    #ffd700;
 }
 
-/* ===== GLOBAL ===== */
-body {
-    background: var(--bg-page);
-    background-attachment: fixed;
-    min-height: 100vh;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* ================================================================
+   BASE
+   ================================================================ */
+html, body {
+    height: 100%;
     margin: 0;
-    transition: background 0.3s ease;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ===== NAVBAR ===== */
-.bg-purple { background-color: #6f42c1 !important; }
+body {
+    background: var(--bg-body) !important;
+    background-attachment: fixed !important;
+    min-height: 100vh;
+    transition: background 0.3s ease, color 0.3s ease;
+    color: var(--card-text);
+}
 
-/* ===== SIDEBAR ===== */
+/* ================================================================
+   NAVBAR
+   ================================================================ */
+.bg-purple {
+    background-color: #6f42c1 !important;
+}
+
+/* In dark mode keep the purple navbar — it works fine on dark bg */
+
+/* ================================================================
+   SIDEBAR
+   ================================================================ */
 .sidebar {
-    background: var(--sidebar-bg);
-    color: var(--sidebar-text);
-    border-right: 1px solid var(--border-color);
+    background: var(--sidebar-bg) !important;
+    border-right: 1px solid var(--empty-border);
     min-height: 100vh;
     transition: background 0.3s ease;
 }
 
 .sidebar-heading {
-    color: var(--sidebar-text);
+    color: var(--sidebar-text) !important;
 }
 
 .sidebar-link {
-    color: var(--sidebar-text) !important;
+    color: var(--sidebar-link) !important;
     background: transparent !important;
+    transition: background 0.2s, color 0.2s;
 }
 
 .sidebar-link:hover,
@@ -69,14 +115,35 @@ body {
     color: #ffffff !important;
 }
 
-/* ===== SECTION HEADINGS ===== */
+/* ================================================================
+   SECTION HEADINGS & BADGES
+   ================================================================ */
 .section-heading {
-    color: var(--section-head);
+    color: var(--section-head) !important;
 }
 
-/* ===== TASK CARDS — Pending ===== */
+/* ================================================================
+   ALERTS / FLASH MESSAGES
+   ================================================================ */
+.alert {
+    background-color: var(--alert-bg) !important;
+    border-color: var(--alert-border) !important;
+    color: var(--alert-text) !important;
+}
+
+.alert .btn-close {
+    filter: invert(0);
+}
+
+[data-theme="dark"] .alert .btn-close {
+    filter: invert(1) brightness(0.8);
+}
+
+/* ================================================================
+   TASK CARDS — PENDING (coloured)
+   ================================================================ */
 .task-card {
-    border: none;
+    border: none !important;
     border-radius: 16px;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     overflow: hidden;
@@ -85,58 +152,127 @@ body {
 
 .task-card:hover {
     transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 12px 28px rgba(0,0,0,0.25) !important;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* ===== TASK CARDS — Completed ===== */
+/* ================================================================
+   TASK CARDS — COMPLETED
+   ================================================================ */
 .completed-card {
-    background-color: var(--card-bg) !important;
-    border-left: 4px solid #198754 !important;
-    opacity: 0.85;
+    background-color: var(--done-card-bg) !important;
+    border-left: 4px solid var(--done-border) !important;
+    opacity: 0.92;
 }
 
+.completed-card .card-title,
 .completed-card h6 {
-    color: var(--text-muted) !important;
+    color: var(--done-text) !important;
 }
 
 .completed-card p,
-.completed-card .small {
-    color: var(--text-muted) !important;
+.completed-card .small,
+.completed-card .card-text {
+    color: var(--done-text) !important;
 }
 
-/* ===== CHECKBOX ===== */
+/* ================================================================
+   NOTIFICATION PANEL
+   ================================================================ */
+#notifPanel {
+    background: var(--notif-bg) !important;
+    border-color: var(--notif-border) !important;
+    color: var(--notif-text) !important;
+}
+
+#notifPanel h6,
+#notifPanel span.small {
+    color: var(--notif-text) !important;
+}
+
+/* ================================================================
+   CHECKBOX
+   ================================================================ */
 .task-checkbox {
     accent-color: #6f42c1;
     flex-shrink: 0;
+    cursor: pointer;
 }
 
-/* ===== EMPTY STATE ===== */
+/* ================================================================
+   EMPTY STATE
+   ================================================================ */
 .empty-state {
-    background: var(--empty-bg);
-    color: var(--text-muted);
-    border: 2px dashed var(--border-color);
+    background: var(--empty-bg) !important;
+    color: var(--empty-text) !important;
+    border: 2px dashed var(--empty-border) !important;
     border-radius: 12px;
-}
-
-/* ===== SEARCH BOX ===== */
-.search-box {
-    border-radius: 20px;
-    padding: 8px 18px;
-    border: 1px solid #ddd;
-    background: var(--input-bg);
-    color: var(--input-text);
-    min-width: 200px;
-}
-
-/* ===== FOOTER ===== */
-.board-footer {
-    background: var(--footer-bg);
-    color: var(--footer-text);
-    border-top: 1px solid var(--border-color);
     transition: background 0.3s ease;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ================================================================
+   SEARCH BOX
+   ================================================================ */
+.search-box {
+    border-radius: 20px;
+    padding: 8px 18px;
+    background: var(--search-bg) !important;
+    color: var(--search-text) !important;
+    border: 1px solid var(--search-border) !important;
+    min-width: 200px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.search-box::placeholder {
+    color: var(--card-muted) !important;
+    opacity: 1;
+}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+.board-footer {
+    background: var(--footer-bg) !important;
+    color: var(--footer-text) !important;
+    border-top: 1px solid var(--footer-border) !important;
+    transition: background 0.3s ease;
+}
+
+/* ================================================================
+   DARK MODE — override Bootstrap utility classes that use !important
+   ================================================================ */
+[data-theme="dark"] .text-dark {
+    color: var(--card-text) !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--card-muted) !important;
+}
+
+[data-theme="dark"] .bg-white {
+    background-color: var(--card-bg) !important;
+}
+
+[data-theme="dark"] .border,
+[data-theme="dark"] .border-top,
+[data-theme="dark"] .border-bottom {
+    border-color: var(--empty-border) !important;
+}
+
+[data-theme="dark"] .shadow-sm {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Cards that don't have explicit bg set (Bootstrap .card default white) */
+[data-theme="dark"] .card:not([class*="bg-"]):not(.completed-card) {
+    background-color: var(--card-bg) !important;
+    color: var(--card-text) !important;
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
 @media (max-width: 767px) {
-    .sidebar { min-height: auto; }
+    .sidebar {
+        min-height: auto;
+    }
 }
