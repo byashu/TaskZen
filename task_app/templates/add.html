@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/addedit.css' %}">
+    <script>(function(){var t=localStorage.getItem('tz-theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
 </head>
 
 <body class="dashboard-main">
@@ -19,6 +20,9 @@
             <span class="fw-bold">TaskZen</span>
         </a>
         <span class="text-white d-none d-md-inline small opacity-75">Productivity is a click away</span>
+        <button class="btn btn-link text-white ms-auto p-1" id="themeToggle" title="Toggle Dark/Light Mode" style="text-decoration:none;">
+            <i class="fas fa-moon fs-5" id="themeIcon"></i>
+        </button>
     </header>
 
     <main class="container py-5">
@@ -111,6 +115,14 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (function(){
+            var btn=document.getElementById('themeToggle'), ico=document.getElementById('themeIcon');
+            function apply(t){ document.documentElement.setAttribute('data-theme',t); ico.className=t==='dark'?'fas fa-sun fs-5':'fas fa-moon fs-5'; localStorage.setItem('tz-theme',t); }
+            apply(localStorage.getItem('tz-theme')||'light');
+            if(btn) btn.addEventListener('click',function(){ apply(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); });
+        })();
+    </script>
     <script>
         // Set minimum date to today
         document.getElementById('dueDateInput').min = new Date().toISOString().split('T')[0];

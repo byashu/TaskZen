@@ -1,6 +1,6 @@
 {% load static %}
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <script>(function(){var t=localStorage.getItem('tz-theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
 
     <style>
         /* Floating Add Task Animation */
@@ -74,6 +75,9 @@
                             {% else %}
                                 <a href="{% url 'login' %}" class="loginbtn btn px-4 py-2 shadow-sm">Login/Sign Up</a>
                             {% endif %}
+                            <button class="btn btn-link p-1" id="themeToggle" title="Toggle Dark/Light Mode" style="text-decoration:none; color:var(--nav-link-color);">
+                                <i class="fas fa-moon fs-5" id="themeIcon"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -299,6 +303,14 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (function(){
+            var btn=document.getElementById('themeToggle'), ico=document.getElementById('themeIcon');
+            function apply(t){ document.documentElement.setAttribute('data-theme',t); ico.className=t==='dark'?'fas fa-sun fs-5':'fas fa-moon fs-5'; localStorage.setItem('tz-theme',t); }
+            apply(localStorage.getItem('tz-theme')||'light');
+            if(btn) btn.addEventListener('click',function(){ apply(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); });
+        })();
+    </script>
     <script>
         const textElement = document.getElementById("typewriter");
         const phrases = ["with TaskZen", "Effortlessly", "Starting Today", "Like a Pro"];

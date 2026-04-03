@@ -1,150 +1,241 @@
-/* ================= GLOBAL STYLES ================= */
+/* ================================================================
+   TASKZEN ADD / EDIT / CATEGORIES — LIGHT + DARK MODE
+   ================================================================ */
+
+/* ---- CSS Variables ---- */
+:root {
+    --ae-body-bg:    linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --ae-card-bg:    #ffffff;
+    --ae-card-shadow:0 10px 30px rgba(0,0,0,0.10);
+    --ae-heading:    #333333;
+    --ae-label:      #495057;
+    --ae-input-bg:   #fcfcfc;
+    --ae-input-bdr:  #eeeeee;
+    --ae-input-text: #212529;
+    --ae-input-ph:   #adb5bd;
+    --ae-text-muted: #6c757d;
+    --ae-foot-bg:    #ffffff;
+    --ae-foot-bdr:   #dee2e6;
+    --ae-foot-text:  #6c757d;
+    --ae-li-bg:      #ffffff;
+    --ae-li-text:    #212529;
+    --ae-li-bdr:     #dee2e6;
+    --ae-btn-light:  #f8f9fa;
+    --ae-btn-ltxt:   #212529;
+    --ae-btn-lbdr:   #dee2e6;
+}
+
+[data-theme="dark"] {
+    --ae-body-bg:    #0d1117;
+    --ae-card-bg:    #161b22;
+    --ae-card-shadow:0 10px 30px rgba(0,0,0,0.45);
+    --ae-heading:    #e6edf3;
+    --ae-label:      #8b949e;
+    --ae-input-bg:   #21262d;
+    --ae-input-bdr:  #30363d;
+    --ae-input-text: #e6edf3;
+    --ae-input-ph:   #6e7681;
+    --ae-text-muted: #8b949e;
+    --ae-foot-bg:    #0d1117;
+    --ae-foot-bdr:   #21262d;
+    --ae-foot-text:  #8b949e;
+    --ae-li-bg:      #161b22;
+    --ae-li-text:    #e6edf3;
+    --ae-li-bdr:     #30363d;
+    --ae-btn-light:  #21262d;
+    --ae-btn-ltxt:   #e6edf3;
+    --ae-btn-lbdr:   #30363d;
+}
+
+/* ================================================================
+   GLOBAL
+   ================================================================ */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: var(--ae-body-bg) !important;
     min-height: 100vh;
-    margin: 0;
-    padding: 0;
+    margin: 0; padding: 0;
+    transition: background 0.3s ease;
 }
 
-.bg-purple {
-    background-color: #6f42c1 !important;
+.bg-purple { background-color: #6f42c1 !important; }
+
+/* ================================================================
+   LAYOUT
+   ================================================================ */
+.form-container { max-width: 600px; margin: 60px auto; padding: 0 20px; }
+
+.dashboard-main {
+    min-height: 100vh;
+    background: var(--ae-body-bg);
+    background-image: url("../images/dashboardbg02.png");
+    background-repeat: repeat;
+    background-size: 300px;
+    background-blend-mode: overlay;
+    transition: background 0.3s ease;
 }
 
-/* ================= FORM CONTAINER & CARD ================= */
-.form-container {
-    max-width: 600px;
-    margin: 60px auto;
-    padding: 0 20px;
+[data-theme="dark"] .dashboard-main {
+    background: var(--ae-body-bg) !important;
+    background-image: none !important;
 }
 
+/* ================================================================
+   FORM CARD
+   ================================================================ */
 .form-card {
-    background-color: white; /* Clean white card for better readability */
+    background-color: var(--ae-card-bg) !important;
     padding: 40px 30px;
     border-radius: 25px;
     border: none;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--ae-card-shadow);
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.form-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-}
+.form-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.18); }
 
-.form-card h2 {
-    font-size: 2rem;
+.form-card h2, .form-card h4, .form-card h5 {
+    color: var(--ae-heading) !important;
     font-weight: bold;
-    color: #333; /* Darker text for professional contrast */
     margin-bottom: 25px;
-    text-align: center;
 }
 
-/* ================= FORM FIELDS ================= */
+/* ================================================================
+   FORM FIELDS
+   ================================================================ */
 .form-label, .form-card label {
     display: block;
     font-weight: 600;
-    color: #495057;
+    color: var(--ae-label) !important;
     margin-bottom: 8px;
 }
 
-.form-control, .form-select, .form-card input, .form-card textarea, .form-card select {
+.form-control,
+.form-select,
+.form-card input,
+.form-card textarea,
+.form-card select {
     width: 100%;
     padding: 12px 15px;
     margin-bottom: 20px;
-    border: 2px solid #eee;
+    border: 2px solid var(--ae-input-bdr) !important;
     border-radius: 12px;
     outline: none;
     font-size: 1rem;
+    background-color: var(--ae-input-bg) !important;
+    color: var(--ae-input-text) !important;
     transition: all 0.3s ease;
-    background-color: #fcfcfc;
 }
 
-.form-control:focus, .form-select:focus, .form-card input:focus, .form-card textarea:focus {
-    border-color: #6f42c1;
-    background-color: #fff;
-    box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.1);
+.form-control::placeholder,
+.form-card input::placeholder,
+.form-card textarea::placeholder {
+    color: var(--ae-input-ph) !important;
 }
 
-/* ================= BUTTONS & ACTIONS ================= */
+.form-control:focus,
+.form-select:focus,
+.form-card input:focus,
+.form-card textarea:focus {
+    border-color: #6f42c1 !important;
+    background-color: var(--ae-input-bg) !important;
+    box-shadow: 0 0 0 3px rgba(111,66,193,0.15) !important;
+}
+
+/* ================================================================
+   TEXT UTILITIES
+   ================================================================ */
+.text-muted { color: var(--ae-text-muted) !important; }
+[data-theme="dark"] .text-dark { color: var(--ae-heading) !important; }
+[data-theme="dark"] .small     { color: var(--ae-text-muted); }
+
+/* ================================================================
+   BUTTONS
+   ================================================================ */
 .actions, .form-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 10px;
+    display: flex; justify-content: center; gap: 15px; margin-top: 10px;
 }
 
 .btn-update, .btn-add, .btn-edit {
-    flex: 1;
-    padding: 12px 30px;
-    border-radius: 12px;
-    font-weight: 700;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    
-    /* Green Style from your original CSS */
-    background: #198754;
-    color: white;
-    border: 2px solid transparent;
+    flex: 1; padding: 12px 30px; border-radius: 12px; font-weight: 700;
+    text-align: center; display: flex; justify-content: center; align-items: center;
+    cursor: pointer; text-decoration: none; transition: all 0.3s ease;
+    background: #198754; color: white; border: 2px solid transparent;
 }
-
 .btn-secondary, .btn-cancle {
-    flex: 1;
-    padding: 12px 30px;
-    border-radius: 12px;
-    font-weight: 700;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.3s ease;
-
-    /* Gold Style from your original CSS */
-    background: #ffc107;
-    color: #212529;
-    border: 2px solid transparent;
+    flex: 1; padding: 12px 30px; border-radius: 12px; font-weight: 700;
+    text-align: center; display: flex; justify-content: center; align-items: center;
+    cursor: pointer; text-decoration: none; transition: all 0.3s ease;
+    background: #ffc107; color: #212529; border: 2px solid transparent;
 }
 
-/* Button Hovers */
 .btn-update:hover, .btn-add:hover, .btn-edit:hover {
-    background: white;
-    color: #198754;
-    border-color: #198754;
-    transform: scale(1.02);
+    background: white; color: #198754; border-color: #198754; transform: scale(1.02);
 }
-
 .btn-secondary:hover, .btn-cancle:hover {
-    background: white;
-    color: #856404;
-    border-color: #ffc107;
-    transform: scale(1.02);
+    background: white; color: #856404; border-color: #ffc107; transform: scale(1.02);
 }
 
-/* ================= FOOTER ================= */
+/* Bootstrap .btn-light override in dark mode */
+[data-theme="dark"] .btn-light {
+    background: var(--ae-btn-light) !important;
+    color: var(--ae-btn-ltxt) !important;
+    border-color: var(--ae-btn-lbdr) !important;
+}
+
+/* Bootstrap .btn-update in dark mode (used on edit.html inline) */
+[data-theme="dark"] .btn.btn-update {
+    background: #198754 !important; color: white !important;
+}
+
+/* ================================================================
+   LIST GROUP (categories page)
+   ================================================================ */
+.list-group-item {
+    background-color: var(--ae-li-bg) !important;
+    color: var(--ae-li-text) !important;
+    border-color: var(--ae-li-bdr) !important;
+}
+
+[data-theme="dark"] .border-bottom { border-color: var(--ae-li-bdr) !important; }
+[data-theme="dark"] .border        { border-color: var(--ae-li-bdr) !important; }
+
+/* ================================================================
+   ALERTS
+   ================================================================ */
+[data-theme="dark"] .alert-danger {
+    background-color: #2a1519 !important;
+    border-color: #842029 !important;
+    color: #f8d7da !important;
+}
+[data-theme="dark"] .alert-warning {
+    background-color: #2d2a1f !important;
+    border-color: #9e7a00 !important;
+    color: #ffd700 !important;
+}
+[data-theme="dark"] .alert-success {
+    background-color: #0f2a1a !important;
+    border-color: #146c43 !important;
+    color: #75b798 !important;
+}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
 .foot, footer {
-    background: white;
-    border-top: 1px solid #dee2e6;
+    background: var(--ae-foot-bg) !important;
+    border-top: 1px solid var(--ae-foot-bdr) !important;
     text-align: center;
-    color: #6c757d;
+    color: var(--ae-foot-text) !important;
     padding: 20px;
     margin-top: 40px;
+    transition: background 0.3s ease;
 }
 
-/* ================= RESPONSIVE ================= */
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
 @media (max-width: 767px) {
-    .form-card {
-        padding: 30px 20px;
-        margin: 20px;
-    }
-    
-    .actions, .form-buttons {
-        flex-direction: column;
-    }
+    .form-card   { padding: 30px 20px; margin: 20px; }
+    .actions, .form-buttons { flex-direction: column; }
 }
