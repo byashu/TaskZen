@@ -191,9 +191,21 @@ body {
 }
 #about-us h2, #about-us h5, #about-us h6 { color: #ffffff; font-weight: 700; }
 
-/* ---- Fix: footer links always visible, not just on hover ---- */
+/* ---- Fix: ALL muted / subdued text in the dark footer ---- */
+/* Bootstrap .text-muted is #6c757d which disappears on #1e272e bg.
+   Override everything inside #about-us to a readable light grey.    */
+#about-us .text-muted,
+#about-us ul.text-muted,
+#about-us ul.text-muted li,
+#about-us p.text-muted,
+#about-us div.text-muted,
+#about-us small {
+    color: #adb5bd !important;
+}
+
+/* ---- Fix: footer resource links always visible, not just on hover ---- */
 .footer-link {
-    color: var(--footer-link) !important;
+    color: #adb5bd !important;
     text-decoration: none !important;
     transition: color 0.25s ease;
 }
